@@ -19,7 +19,7 @@ So, the same idea was applied in this repo, in order to get better results with 
 Autoencoder was applied to the outputs of RNN-encoder in AttnGAN. It has word feature vectors and 
 sentence feature vector - they represent features of the text, so we can try to reduce noise in them.
 
-#### Solution description
+#### Solution
 
 ```
 autoencoder= 
@@ -58,3 +58,8 @@ Autoencoder with 12 hidden features shows a good result here - bird doesn't have
 ![alt text](original_very_bad.png) | ![alt text](ae_good_3.png) 
 
 
+#### Conclusion
+Sentence autoencoder fixed some cases for which original GAN generated non-relevant examples, but also in some cases 
+it reduces some details of an image. 
+
+So, there is space for further exploration.
