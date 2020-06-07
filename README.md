@@ -60,7 +60,6 @@ Autoencoder with 12 hidden features shows a good result here - bird doesn't have
 
 
 #### Conclusion
-Sentence autoencoder fixed some cases for which the original GAN generated non-relevant examples, but also in some cases 
-it may reduce details of an image. 
+Sentence autoencoder fixed some cases for which the original GAN generated non-relevant examples, but also it may reduce details of an image in some cases. 
 
 So, there is space for further exploration.
