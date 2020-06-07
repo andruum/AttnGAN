@@ -102,6 +102,13 @@ class RNN_ENCODER(nn.Module):
         # number of features in the hidden state
         self.nhidden = nhidden // self.num_directions
 
+        self.autoencoder_sentence = nn.Sequential(
+            nn.Linear(nhidden, nhidden // 20),
+            nn.LeakyReLU(),
+            nn.Linear(nhidden // 20, nhidden),
+            nn.Tanh(),
+        )
+
         self.define_module()
         self.init_weights()
 
@@ -168,6 +175,10 @@ class RNN_ENCODER(nn.Module):
         else:
             sent_emb = hidden.transpose(0, 1).contiguous()
         sent_emb = sent_emb.view(-1, self.nhidden * self.num_directions)
+
+        # Noise suppression
+        sent_emb = self.autoencoder_sentence(sent_emb)
+
         return words_emb, sent_emb
 
 

@@ -3,12 +3,12 @@
 This repository is a fork from the implementation of 
 [AttnGAN: Fine-Grained Text to Image Generation with Attentional Generative Adversarial Networks](http://openaccess.thecvf.com/content_cvpr_2018/papers/Xu_AttnGAN_Fine-Grained_Text_CVPR_2018_paper.pdf)
 
-####Problem:
+#### Problem:
 Original implementation doesn't have any noise suppression algorithm, 
 thus sentence and word feature vectors are exposed to noise in an input text.
 
 
-####Proposed solution:
+#### Proposed solution:
 In a paper [A Generative Adversarial Approach for Zero-Shot Learning from Noisy Texts](http://openaccess.thecvf.com/content_cvpr_2018/papers/Zhu_A_Generative_Adversarial_CVPR_2018_paper.pdf)
 there was proposed an approach to handle noise in texts. In essence, the solution uses a fully-connected layer 
 for an input vector which reduces its size (from 11083 to 1000). After this it adds some noise and scales to 4096 feature vector.
@@ -19,7 +19,7 @@ So, the same idea was applied in this repo, in order to get better results with 
 Autoencoder was applied to the outputs of RNN-encoder in AttnGAN. It has word feature vectors and 
 sentence feature vector - they represent features of the text, so we can try to reduce noise in them.
 
-####Solution description
+#### Solution description
 
 ```
 autoencoder= 

@@ -100,16 +100,16 @@ def train(dataloader, cnn_model, rnn_model, batch_size,
         if step % UPDATE_INTERVAL == 0:
             count = epoch * len(dataloader) + step
 
-            s_cur_loss0 = s_total_loss0[0] / UPDATE_INTERVAL
-            s_cur_loss1 = s_total_loss1[0] / UPDATE_INTERVAL
+            s_cur_loss0 = s_total_loss0 / UPDATE_INTERVAL
+            s_cur_loss1 = s_total_loss1 / UPDATE_INTERVAL
 
-            w_cur_loss0 = w_total_loss0[0] / UPDATE_INTERVAL
-            w_cur_loss1 = w_total_loss1[0] / UPDATE_INTERVAL
+            w_cur_loss0 = w_total_loss0 / UPDATE_INTERVAL
+            w_cur_loss1 = w_total_loss1 / UPDATE_INTERVAL
 
             elapsed = time.time() - start_time
             print('| epoch {:3d} | {:5d}/{:5d} batches | ms/batch {:5.2f} | '
-                  's_loss {:5.2f} {:5.2f} | '
-                  'w_loss {:5.2f} {:5.2f}'
+                  's_loss {:5.5f} {:5.5f} | '
+                  'w_loss {:5.5f} {:5.5f}'
                   .format(epoch, step, len(dataloader),
                           elapsed * 1000. / UPDATE_INTERVAL,
                           s_cur_loss0, s_cur_loss1,
@@ -157,8 +157,8 @@ def evaluate(dataloader, cnn_model, rnn_model, batch_size):
         if step == 50:
             break
 
-    s_cur_loss = s_total_loss[0] / step
-    w_cur_loss = w_total_loss[0] / step
+    s_cur_loss = s_total_loss / step
+    w_cur_loss = w_total_loss / step
 
     return s_cur_loss, w_cur_loss
 
@@ -171,7 +171,7 @@ def build_models():
     start_epoch = 0
     if cfg.TRAIN.NET_E != '':
         state_dict = torch.load(cfg.TRAIN.NET_E)
-        text_encoder.load_state_dict(state_dict)
+        text_encoder.load_state_dict(state_dict, False)
         print('Load ', cfg.TRAIN.NET_E)
         #
         name = cfg.TRAIN.NET_E.replace('text_encoder', 'image_encoder')
@@ -258,10 +258,11 @@ if __name__ == "__main__":
 
     # Train ##############################################################
     text_encoder, image_encoder, labels, start_epoch = build_models()
-    para = list(text_encoder.parameters())
-    for v in image_encoder.parameters():
-        if v.requires_grad:
-            para.append(v)
+    # para = list(text_encoder.parameters())
+    para = list(text_encoder.autoencoder_sentence.parameters())
+    # for v in image_encoder.parameters():
+    #     if v.requires_grad:
+    #         para.append(v)
     # optimizer = optim.Adam(para, lr=cfg.TRAIN.ENCODER_LR, betas=(0.5, 0.999))
     # At any point you can hit Ctrl + C to break out of training early.
     try:
@@ -281,7 +282,7 @@ if __name__ == "__main__":
                       .format(epoch, s_loss, w_loss, lr))
             print('-' * 89)
             if lr > cfg.TRAIN.ENCODER_LR/10.:
-                lr *= 0.98
+                lr *= 0.97
 
             if (epoch % cfg.TRAIN.SNAPSHOT_INTERVAL == 0 or
                 epoch == cfg.TRAIN.MAX_EPOCH):

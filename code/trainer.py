@@ -66,7 +66,7 @@ class condGANTrainer(object):
         state_dict = \
             torch.load(cfg.TRAIN.NET_E,
                        map_location=lambda storage, loc: storage)
-        text_encoder.load_state_dict(state_dict)
+        text_encoder.load_state_dict(state_dict, False)
         for p in text_encoder.parameters():
             p.requires_grad = False
         print('Load text encoder from:', cfg.TRAIN.NET_E)
@@ -440,7 +440,7 @@ class condGANTrainer(object):
                 RNN_ENCODER(self.n_words, nhidden=cfg.TEXT.EMBEDDING_DIM)
             state_dict = \
                 torch.load(cfg.TRAIN.NET_E, map_location=lambda storage, loc: storage)
-            text_encoder.load_state_dict(state_dict)
+            text_encoder.load_state_dict(state_dict, strict=False)
             print('Load text encoder from:', cfg.TRAIN.NET_E)
             text_encoder = text_encoder.cuda()
             text_encoder.eval()
