@@ -14,7 +14,7 @@ there was proposed an approach to handle noise in texts. In essence, the solutio
 for an input vector which reduces its size (from 11083 to 1000). After this it adds some noise and scales to 4096 feature vector.
 
 Basically, it works like an autoencoder with one hidden layer, which reduces noise in the input vector. 
-So, the same idea was applied in this repo, in order to get better results with original attentional GAN. 
+So, the same idea was applied in this repo, in order to get better results with the original attentional GAN. 
 
 Autoencoder was applied to the outputs of RNN-encoder in AttnGAN. It has word feature vectors and 
 sentence feature vector - they represent features of the text, so we can try to reduce noise in them.
@@ -32,7 +32,7 @@ nn.Sequential(
 `nhidden` - number of hidden output features of RNN-encoder.
 
 The first attempt was to apply noise suppression to all outputs (word and sentence features as well, two different autoencoders),
-but it caused to degradation in quality of details:
+but it caused to degradation in quality of picture details:
 
  Original solution |  Word and sentence autoencoder | Sentence autoencoder only
 :-------------------------:|:-------------------------:|:-------------------------:
@@ -40,8 +40,9 @@ but it caused to degradation in quality of details:
 
 So, the final solution contains only sentence autoencoder.
 
-Also, it has intuition behind this - sentence features are quite important, because they ar eused for generation
-of the first low-scale image, and the final result depends on its quality and realism.
+Also, it has intuition behind this - sentence features are quite important, because they are used for generation
+of the first low-scale image, and the final result depends on its quality and realism. And word features are used to generate more details of the image - 
+and we want our image to have more visual features.
 
 The suggested approach helped to get rid of the noise for some examples:
 
@@ -49,7 +50,7 @@ The suggested approach helped to get rid of the noise for some examples:
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![alt text](out_noised.png) | ![alt text](out_denoised_10.png) | ![alt text](out_denoised_15.png) | ![alt text](out_denoised_20.png) | ![alt text](out_denoised_25.png)
 
-Autoencoder with 12 hidden features shows a good result here - bird doesn't have two beaks as in the original example. So, this architecture was trained for more epochs:
+Autoencoder with 12 hidden features shows a good result here - bird doesn't have two beaks like in the original example. So, this architecture was trained for more epochs:
 
  Original | AE 
 :-------------------------:|:-------------------------:
@@ -59,7 +60,7 @@ Autoencoder with 12 hidden features shows a good result here - bird doesn't have
 
 
 #### Conclusion
-Sentence autoencoder fixed some cases for which original GAN generated non-relevant examples, but also in some cases 
-it reduces some details of an image. 
+Sentence autoencoder fixed some cases for which the original GAN generated non-relevant examples, but also in some cases 
+it may reduce details of an image. 
 
 So, there is space for further exploration.
