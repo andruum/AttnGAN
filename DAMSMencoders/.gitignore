@@ -1,2 +1,4 @@
 *
+!bird/image_encoder280.pth
+!bird/text_encoder280.pth
 !.gitignore
